@@ -1,1 +1,1 @@
-# lstm_forecasting
+# Long Short Term Memory (LSTM) for Forecasting
