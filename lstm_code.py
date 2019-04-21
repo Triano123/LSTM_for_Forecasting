@@ -16,10 +16,6 @@ from keras.layers import LSTM
 #ploting with keras
 from livelossplot import PlotLossesKeras
 
-#tensorboard 
-from keras.callbacks import TensorBoard
-from time import time
-
 #math module
 import math
 from math import sqrt
@@ -118,28 +114,25 @@ trainX = np.reshape(trainX, (trainX.shape[0], time_step, trainX.shape[1]))
 testX  = np.reshape(testX, (testX.shape[0], time_step, testX.shape[1]))
 testX.shape[0]
 
+
 #creating model LSTM 
 model = Sequential()
 model.add(LSTM(4 ,input_shape = (time_step, look_back)))
 model.add(Dense(1))
 model.compile(loss = 'mean_squared_error', optimizer = 'adam')
-# Create a TensorBoard instance with the path to the logs directory
 model.fit(trainX, trainY,
+        validation_data = (testX, testY),
         epochs = 100, 
         batch_size= 1, 
         verbose= 2, 
-        callbacks=[tensorboard])
+        callbacks=[PlotLossesKeras()])
 
-#model 2
-#model.fit(X_train, Y_train,epochs=10,validation_data=(X_test, Y_test),callbacks=[PlotLossesKeras()],verbose=0)
 
 #save model keras 
-save_model_1 = model.save('model_1.h5')
-save_model_2 = model.save('model_2.h5')
+save_model = model.save('model.h5')
 
 #load model keras
-model_1 = load_model('model_1.h5')
-model_2 = load_model('model_2.h5')
+model = load_model('model.h5')
 
 #make prediction 
 pred_train = model_1.predict(trainX)
